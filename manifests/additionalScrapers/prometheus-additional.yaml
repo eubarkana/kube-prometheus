@@ -1,0 +1,11 @@
+#prometheus.additionalScrapeConfigs.enabled=true
+#prometheus.additionalScrapeConfigs.type=internal
+#prometheus.additionalScrapeConfigs.internal.jobList=
+  # Adding a reference to an MQ monitor. All we have to do is
+  # name the host and port on which the monitor is listening.
+  # Port 9157 is the reserved default port for the MQ monitor.
+  - job_name: "ibmmq"
+    scrape_interval: 15s
+
+    static_configs:
+    - targets: ["192.168.0.21:9157"]
