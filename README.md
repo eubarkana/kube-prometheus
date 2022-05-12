@@ -48,6 +48,7 @@ If you are migrating from `release-0.7` branch or earlier please read [what chan
     - [Compile the manifests and apply](#compile-the-manifests-and-apply)
   - [Configuration](#configuration)
   - [Customization Examples](#customization-examples)
+  - [Additional Scraper](#additional-scrapers)
   - [Minikube Example](#minikube-example)
   - [Continuous Delivery](#continuous-delivery)
   - [Security](docs/security.md)
