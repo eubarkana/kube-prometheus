@@ -48,7 +48,7 @@ If you are migrating from `release-0.7` branch or earlier please read [what chan
     - [Compile the manifests and apply](#compile-the-manifests-and-apply)
   - [Configuration](#configuration)
   - [Customization Examples](#customization-examples)
-  - [Additional Scraper](#additional-scrapers)
+  - [Additional Scrapers](#additional-scrapers)
   - [Minikube Example](#minikube-example)
   - [Continuous Delivery](#continuous-delivery)
   - [Security](docs/security.md)
@@ -360,7 +360,7 @@ Jsonnet is a turing complete language, any logic can be reflected in it. It also
 
 To get started, we provide several customization examples in the [docs/customizations/](docs/customizations) section.
 
-## Additional Scraper
+## Additional Scrapers
 
 To add extra scrapers to prometheus, metric files need to be extracted from the product to be monitored.  Those metrics should be available when you type the URL from the browser.
 
