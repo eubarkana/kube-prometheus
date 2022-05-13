@@ -360,6 +360,53 @@ Jsonnet is a turing complete language, any logic can be reflected in it. It also
 
 To get started, we provide several customization examples in the [docs/customizations/](docs/customizations) section.
 
+## Additional Scraper
+
+To add extra scrapers to prometheus, metric files need to be extracted from the product to be monitored.  Those metrics should be available when you type the URL from the browser.
+
+For this example, IBM MQ metrics are exposed. Exposing IBM MQ metrics is explained in README of "https://github.com/ibm-messaging/mq-metric-samples".
+
+To capture IBM MQ metrics on prometheus, add the lines:
+```
+  # Adding a reference to an MQ monitor. All we have to do is
+  # name the host and port on which the monitor is listening.
+  # Port 9157 is the reserved default port for the MQ monitor.
+  - job_name: "ibmmq"
+    scrape_interval: 15s
+ 
+    static_configs:
+    - targets: ["xxx.xxx.xxx.xxx:9157"] 
+```
+in to a yaml file called `prometheus-additional.yaml` where IP address has to be typed in.
+
+Secret has to be created from the yaml above. Navigate to same location where the yaml file resides and execute the command below to have a secret yaml file generated:
+
+```kubectl create secret generic additional-scrape-configs --from-file=prometheus-additional.yaml --dry-run=client -oyaml > additional-scrape-configs.yaml```
+
+From the generated secret yaml file, create the secret within the same namespace of the Prometheus(for this sample the namespace was monitoring):
+
+```kubectl apply -f additional-scrape-configs.yaml -n monitoring```
+
+**NOTE:** Use only one secret for ALL additional scrape configurations.
+
+Now, secret has to be recognized by the Prometheus. In order to do this, find the prometheus operator with
+
+```kubectl get Prometheus -n monitoring```
+
+Edit the operator yaml(name of the operator is k8s in this sample):
+
+```kubectl edit Prometheus/k8s -n monitoring -o yaml```
+
+Add the lines below under spec of the operator:
+```
+  spec:
+    additionalScrapeConfigs:
+      key: prometheus-additional.yaml
+      name: additional-scrape-configs
+```
+
+Save and exit the yaml. Prometheus cannot directly fetch the metrics. Prometheus operator needs to be restarted. Restart the Prometheus operator POD.
+
 ## Minikube Example
 
 To use an easy to reproduce example, see [minikube.jsonnet](examples/minikube.jsonnet), which uses the minikube setup as demonstrated in [Prerequisites](#prerequisites). Because we would like easy access to our Prometheus, Alertmanager and Grafana UIs, `minikube.jsonnet` exposes the services as NodePort type services.
